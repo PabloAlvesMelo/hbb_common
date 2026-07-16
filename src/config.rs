@@ -117,8 +117,11 @@ const CHARS: &[char] = &[
     'm', 'n', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
 ];
 
-pub const RENDEZVOUS_SERVERS: &[&str] = &["rs-ny.rustdesk.com"];
-pub const RS_PUB_KEY: &str = "OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw=";
+// RN-026 (sistema fechado): o cliente sai de fabrica apontando pro servidor proprio,
+// nunca pros servidores publicos do RustDesk. Trocar quando o servidor de producao
+// tiver endereco definitivo (hoje: ambiente de teste /opt/hd em SG-Desenvolvimento).
+pub const RENDEZVOUS_SERVERS: &[&str] = &["192.168.2.222"];
+pub const RS_PUB_KEY: &str = "EIKBqz5a2dQ6sUywXOIYuUEEna8bzISg23d9pnBvxSg=";
 
 pub const RENDEZVOUS_PORT: i32 = 21116;
 pub const RELAY_PORT: i32 = 21117;
