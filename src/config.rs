@@ -69,7 +69,9 @@ lazy_static::lazy_static! {
     static ref ONLINE: Mutex<HashMap<String, i64>> = Default::default();
     pub static ref PROD_RENDEZVOUS_SERVER: RwLock<String> = RwLock::new("".to_owned());
     pub static ref EXE_RENDEZVOUS_SERVER: RwLock<String> = Default::default();
-    pub static ref APP_NAME: RwLock<String> = RwLock::new("SConnect".to_owned());
+    // Cliente SG Sistemas: sem espaco no nome (APP_NAME entra sem aspas em
+    // `sc create {app_name}` no instalador Windows - espaco quebra o servico).
+    pub static ref APP_NAME: RwLock<String> = RwLock::new("SGConnect".to_owned());
     static ref KEY_PAIR: Mutex<Option<KeyPair>> = Default::default();
     static ref USER_DEFAULT_CONFIG: RwLock<(UserDefaultConfig, Instant)> = RwLock::new((UserDefaultConfig::load(), Instant::now()));
     pub static ref NEW_STORED_PEER_CONFIG: Mutex<HashSet<String>> = Default::default();
@@ -118,10 +120,11 @@ const CHARS: &[char] = &[
 ];
 
 // RN-026 (sistema fechado): o cliente sai de fabrica apontando pro servidor proprio,
-// nunca pros servidores publicos do RustDesk. Trocar quando o servidor de producao
-// tiver endereco definitivo (hoje: ambiente de teste /opt/hd em SG-Desenvolvimento).
-pub const RENDEZVOUS_SERVERS: &[&str] = &["192.168.2.222"];
-pub const RS_PUB_KEY: &str = "EIKBqz5a2dQ6sUywXOIYuUEEna8bzISg23d9pnBvxSg=";
+// nunca pros servidores publicos do RustDesk.
+// Branch cliente-sgconnect: servidor de producao do cliente SG Sistemas
+// (instalado 2026-07-16; chave gerada la, registrada em doc 07).
+pub const RENDEZVOUS_SERVERS: &[&str] = &["sgconnect.sgsistemas.com.br"];
+pub const RS_PUB_KEY: &str = "clCWWMtdqjHl5CO8Oxb+tsoJh2F7MleP8Z89pimmaa4=";
 
 pub const RENDEZVOUS_PORT: i32 = 21116;
 pub const RELAY_PORT: i32 = 21117;
