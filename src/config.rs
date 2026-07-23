@@ -69,9 +69,11 @@ lazy_static::lazy_static! {
     static ref ONLINE: Mutex<HashMap<String, i64>> = Default::default();
     pub static ref PROD_RENDEZVOUS_SERVER: RwLock<String> = RwLock::new("".to_owned());
     pub static ref EXE_RENDEZVOUS_SERVER: RwLock<String> = Default::default();
-    // Cliente SG Sistemas: sem espaco no nome (APP_NAME entra sem aspas em
-    // `sc create {app_name}` no instalador Windows - espaco quebra o servico).
-    pub static ref APP_NAME: RwLock<String> = RwLock::new("SGConnect".to_owned());
+    // SG tem mais de uma softhouse - em vez de um agent por softhouse, um agent
+    // so com o nome padrao do produto (SConnect, RN-050 [2026-07-23]). Sem
+    // espaco no nome (APP_NAME entra sem aspas em `sc create {app_name}` no
+    // instalador Windows - espaco quebra o servico).
+    pub static ref APP_NAME: RwLock<String> = RwLock::new("SConnect".to_owned());
     static ref KEY_PAIR: Mutex<Option<KeyPair>> = Default::default();
     static ref USER_DEFAULT_CONFIG: RwLock<(UserDefaultConfig, Instant)> = RwLock::new((UserDefaultConfig::load(), Instant::now()));
     pub static ref NEW_STORED_PEER_CONFIG: Mutex<HashSet<String>> = Default::default();
