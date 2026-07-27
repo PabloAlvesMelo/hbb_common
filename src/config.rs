@@ -125,8 +125,19 @@ const CHARS: &[char] = &[
 // nunca pros servidores publicos do RustDesk.
 // Branch cliente-sgconnect: servidor de producao do cliente SG Sistemas
 // (instalado 2026-07-16; chave gerada la, registrada em doc 07).
-pub const RENDEZVOUS_SERVERS: &[&str] = &["sgconnect.sgsistemas.com.br"];
-pub const RS_PUB_KEY: &str = "clCWWMtdqjHl5CO8Oxb+tsoJh2F7MleP8Z89pimmaa4=";
+//
+// Override em tempo de compilacao (SCONNECT_RENDEZVOUS_SERVERS/SCONNECT_RS_PUB_KEY) -
+// pra gerar um build extra apontado pra outro ambiente (ex.: LOCAL, 192.168.2.222)
+// sem editar este arquivo nem afetar o build "de fabrica" (PILOTO), que continua
+// usando o default abaixo quando a env var nao e' setada. Ver build-windows.ps1.
+pub const RENDEZVOUS_SERVERS: &[&str] = &[match option_env!("SCONNECT_RENDEZVOUS_SERVERS") {
+    Some(s) => s,
+    None => "sgconnect.sgsistemas.com.br",
+}];
+pub const RS_PUB_KEY: &str = match option_env!("SCONNECT_RS_PUB_KEY") {
+    Some(s) => s,
+    None => "clCWWMtdqjHl5CO8Oxb+tsoJh2F7MleP8Z89pimmaa4=",
+};
 
 pub const RENDEZVOUS_PORT: i32 = 21116;
 pub const RELAY_PORT: i32 = 21117;
