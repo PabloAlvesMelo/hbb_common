@@ -788,6 +788,13 @@ message ElevationRequest {
   }
 }
 
+// Senha de acesso nao supervisionado (permanent password) empurrada pelo atendente por
+// dentro da sessao ja criptografada, sem passar pelo servidor - ver Parte A em
+// docs/. Espelha o par ElevationRequest/elevation_response acima.
+message SetAccessPasswordRequest {
+  string password = 1;
+}
+
 message SwitchSidesRequest {
   bytes uuid = 1;
 }
@@ -859,6 +866,10 @@ message Misc {
     DisplayResolution change_display_resolution = 36;
     MessageQuery message_query = 37;
     int32 follow_current_display = 38;
+    SetAccessPasswordRequest set_access_password_request = 39;
+    // Vazio = sucesso; qualquer texto = motivo da falha (mesma convencao de
+    // elevation_response acima).
+    string set_access_password_response = 40;
   }
 }
 
