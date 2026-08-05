@@ -179,12 +179,31 @@ pub fn get_display_server_of_session(session: &str) -> String {
     if display_server.is_empty() || display_server == "tty" || display_server == "unspecified" {
         if let Ok(sestype) = std::env::var("XDG_SESSION_TYPE") {
             if !sestype.is_empty() {
+                // Compatibilidade PDV SG Sistemas: um login de console (tty) real que
+                // depois sobe o X manualmente (`startx`/`xinit` pelo shell, comum em
+                // PDV/kiosk sem display manager) e' reportado pelo loginctl/
+                // XDG_SESSION_TYPE como "tty", mesmo com um Xorg de verdade rodando
+                // pra essa sessao. Sem tratar isso, esse valor "tty" chega na checagem
+                // X11-ou-Wayland de quem chama e e' rejeitado como sessao sem suporte,
+                // fechando a conexao logo apos o handshake. Se o Xorg esta realmente
+                // vivo, confia nisso em vez do rotulo tty. Se essa topologia de PDV
+                // deixar de ser usada, este bloco (e is_xorg_running() abaixo) pode
+                // ser removido.
+                if sestype.to_lowercase() == "tty" && is_xorg_running() {
+                    return "x11".to_owned();
+                }
                 return sestype.to_lowercase();
             }
         }
         display_server = "x11".to_owned();
     }
     display_server.to_lowercase()
+}
+
+fn is_xorg_running() -> bool {
+    run_cmds("ps -ef | grep '[X]org'")
+        .map(|out| !out.trim().is_empty())
+        .unwrap_or(false)
 }
 
 #[inline]
